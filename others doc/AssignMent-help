@@ -1,0 +1,101 @@
+docker build -t munawarhassan/currencyconfigserver:latest . 
+docker run -p 8888:8888 -d --name currencyconfigserver --network ms-chassis-nw munawarhassan/currencyconfigserver:latest
+
+
+docker build -t munawarhassan/currencyeurekaserver:latest .
+docker run -p 8761:8761 -d --name currencyeurekaserver --network ms-chassis-nw munawarhassan/currencyeurekaserver:latest
+
+
+docker build -t munawarhassan/currencycloudapigateway:latest .
+docker run -p 80:8090 -d --name currencycloudapigateway --network ms-chassis-nw munawarhassan/currencycloudapigateway:latest
+
+
+docker build -t munawarhassan/currencyconverterservice:latest .
+docker run -p 8081:8081 -d --name currencyconverterservice --network ms-chassis-nw munawarhassan/currencyconverterservice:latest
+#docker run -d --name currencyconverterservice --network ms-chassis-nw munawarhassan/currencyconverterservice:latest
+
+
+
+docker build -t munawarhassan/currencyexchangeservice:latest .
+docker run -p 8082:8082 -d --name currencyexchangeservice --network ms-chassis-nw munawarhassan/currencyexchangeservice:latest
+#docker run -d --name currencyexchangeservice --network ms-chassis-nw munawarhassan/currencyexchangeservice:latest
+
+
+
+
+Go to mschassis/rabbitmq
+kubectl apply -f rabbitmq-dep-w-k8s.yaml
+kubectl apply -f rabbitmq-dep-k8s.yaml
+kubectl apply -f rabbitmq-svc-k8s.yaml
+
+
+Go to mschassis/zipkin
+kubectl apply -f zipkin-dep-k8s.yaml
+kubectl apply -f zipkin-svc-k8s.yaml
+
+kubectl apply -f currencyconfigserver-dep-k8s.yaml
+kubectl apply -f currencyconfigserver-svc-k8s.yaml
+
+kubectl apply -f currencyeurekaserver-dep-k8s.yaml
+kubectl apply -f currencyeurekaserver-svc-k8s.yaml
+
+
+kubectl apply -f currencycloudapigateway-dep-k8s.yaml
+kubectl apply -f currencycloudapigateway-svc-k8s.yaml
+
+
+##################################
+
+@FOR /f "tokens=*" %i IN ('docker-machine env docker-vm1') DO @%i
+
+
+
+http://192.168.99.100/currencycloudapigateway/default
+http://192.168.99.100/currencyconversionfactor/default
+http://192.168.99.100/currencyexchange/default
+
+http://192.168.99.100/currencyexchange/convertcurrency/100/GBP/INR            ------------(Fign)
+http://192.168.99.100/currencyexchange/convertcurrency1/100/GBP/INR           ------------------(Ribbon)
+
+
+http://192.168.99.100/currencyconversionfactor/getconversionfactor/GBP
+http://192.168.99.100/currencyconversionfactor/addconversionfactor
+http://192.168.99.100/currencyconversionfactor/updateconversionfactor
+
+{
+ "id": 10001,
+ "currency" : "INR",
+ "countryCode":"IND",
+ "conversionFactor" : "0.019"
+}
+
+
+{
+ "id": 10002,
+ "currency" : "GBP",
+ "countryCode":"GB",
+ "conversionFactor" : "1.29"
+}
+http://192.168.99.100:8761 (eureka)
+http://192.168.99.100:9411/zipkin/
+http://192.168.99.100:8082/hystrix
+http://192.168.99.100:8082/actuator/hystrix.stream
+http://192.168.99.100:15672/#/channels
+
+
+######################################
+K8S
+
+kubectl describe node node01[get the pods running there ]
+kubectl get svc [helps to get the port]
+
+
+http://<workernodeip>:<port>
+http://192.168.99.105:30502/#/channels
+
+http://192.168.99.106:31914/zipkin/
+
+http://192.168.99.105:32324
+
+
+

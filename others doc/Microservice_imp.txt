@@ -1,0 +1,124 @@
+http://localhost:8081/currencyconversionfactor/default
+http://CurrencyConversionFactorService/currencyconversionfactor/default
+
+
+EUROconversionfactor: 1.15
+INRconversionfactor:  0.017
+AUDconversionfactor:  0.75
+GBPconversionfactor:  1.25
+
+application name :CurrencyConversionFactorService
+
+55044
+55076
+
+http://192.168.99.100:8081/currencyconversionfactor/addconversionfactor
+http://localhost:8081/currencyconversionfactor/updateconversionfactor
+http://192.168.99.100:8081/currencyconversionfactor/default
+http://192.168.99.100:8081/currencyconversionfactor/getconversionfactor/
+
+http://192.168.99.100:8081/currencyconversionfactor/getconversionfactor/GBP
+
+http://192.168.99.100/currencycloudapigateway/default
+
+{
+ "id": 10001,
+ "currency" : "INR",
+ "countryCode":"IND",
+ "conversionFactor" : "0.019"
+}
+
+
+{
+ "id": 10002,
+ "currency" : "GBP",
+ "countryCode":"GB",
+ "conversionFactor" : "1.29"
+}
+
+##########################################################
+application name :CurrencyExchangeService
+
+
+http://192.168.99.100:8082/currencyexchange/convertcurrency/100/GBP/INR
+
+http://192.168.99.100:8082/currencyexchange/default
+http://localhost:8082/currencyexchange/convertcurrency/withoutclient
+http://localhost:8082/currencyexchange/convertcurrency/usingrdiscovery
+http://localhost:8082/currencyexchange/convertcurrency/usingfeign
+http://localhost:8082/currencyexchange/convertcurrency/usingribbon
+http://localhost:8082/currencyexchange/convertcurrency/usingribbonwithfallback
+http://localhost:8082/hystrix
+http://localhost:8082/actuator/hystrix.stream
+http://localhost:8090 (APIGATEWAY)
+
+############################
+
+With APIGateway :  
+
+http://localhost:8090/currencyconversionfactor/default
+http://localhost:8090/currencyexchange/default
+
+
+http://192.168.99.100/currencycloudapigateway/default
+http://192.168.99.100/currencyconversionfactor/default
+http://192.168.99.100/currencyexchange/default
+
+
+http://192.168.99.100/currencyexchange/convertcurrency/100/GBP/INR            ------------(Fign)
+http://192.168.99.100/currencyexchange/convertcurrency1/100/GBP/INR           ------------------(Ribbon)
+
+
+http://192.168.99.100/currencyconversionfactor/getconversionfactor/GBP
+http://192.168.99.100/currencyconversionfactor/addconversionfactor
+http://192.168.99.100/currencyconversionfactor/updateconversionfactor
+
+{
+ "id": 10001,
+ "currency" : "INR",
+ "countryCode":"IND",
+ "conversionFactor" : "0.019"
+}
+
+
+{
+ "id": 10002,
+ "currency" : "GBP",
+ "countryCode":"GB",
+ "conversionFactor" : "1.29"
+}
+
+
+http://192.168.99.100:8082/hystrix
+http://192.168.99.100:8082/actuator/hystrix.stream
+#################################
+
+
+http://localhost:63344/h2
+http://localhost:55123/actuator
+http://localhost:8082/hystrix
+http://localhost:8082/actuator/hystrix.stream
+
+http://192.168.99.100:8888/application/default(config server)
+http://localhost:8888/currencyconversionfactorservice/dev
+http://localhost:8888/currencyexchangeservice/dev
+http://localhost:8888/currencycloudapigateway/dev
+http://localhost:8761 (Eureka server)
+
+http://localhost:8761
+
+
+http://localhost:8090/currencyexchange/convertcurrency/100/GBP/INR   --------(Fign)
+http://localhost:8090/currencyexchange/convertcurrency1/100/GBP/INR   
+
+ ResponseEntity<CurrencyExchangeBean> responseEntity = restTemplate1.getForEntity(baseUrl, CurrencyExchangeBean.class);
+
+
+docker-vm1   *        virtualbox   Running   tcp://192.168.99.100:2376           v19.03.12
+docker-vm2   -        virtualbox   Running   tcp://192.168.99.101:2376           v19.03.12
+
+
+
+http://192.168.99.100:15672
+
+ @FOR /f "tokens=*" %i IN ('docker-machine env docker-vm1') DO @%i
