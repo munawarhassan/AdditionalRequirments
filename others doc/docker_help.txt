@@ -179,6 +179,9 @@ kubectl get events -n demo -w
 
 kubectl get deployment -n demo
 kubectl scale deployment nginx --replicas=1 -n demo
+
+
+
 -----------------------
 kubectl version
 kubectl version --short
@@ -205,15 +208,16 @@ On Master
 	kubectl describe sa admin-user -n kube-system  //////[kubectl get secrets -n kube-system]
 	kubectl describe secret <admin-user-token-gm7rn(name found from above command)> -n kube-system	
 **************
-    [ validate in jwi.io website. If it decodes it means it is valid]
+    [ validate in jwt.io website. If it decodes it means it is valid]
 	
 
 5.Copy the token
 
+-------------------------------------------------------------------------
 [
  kubectl get secrets
  kubectl describe secret <default token name> 
- (validate in jwi.io website. If it decodes it means it is valid)	
+ (validate in jwt.io website. If it decodes it means it is valid)	
 	
 ]
 
@@ -274,7 +278,22 @@ kubectl get deployments
 kubectl delete deployment <deployment name of the pod>
 kubectl get events -w
 
+kubectl logs <pods name> -f
 
+kubectl get nodes -o wide
+
+kubectl get svc <servicename>
+############################################################
+Deployment Create:  kubectl create deployment eurekaserver --image=munawarhassan/CurrencyConversionFactorService:eureka
+Service Create:     kubectl expose deployment/eurekaserver --type="NodePort" --port=8761
+To see external IP:  kubectl get nodes -o wide
+Example:  C:\microservices\microservice_workspace\eurekaserver>kubectl get nodes -o wide
+NAME             STATUS   ROLES    AGE    VERSION       INTERNAL-IP      EXTERNAL-IP      OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+10.144.212.193   Ready    <none>   3d9h   v1.18.4+IKS   10.144.212.193   169.51.203.144   Ubuntu 16.04.6 LTS   4.4.0-184-generic   containerd://1.3.4
+To see port:         kubectl get services eurekaserver
+Example:
+NAME    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE
+order   NodePort   172.21.34.125   <none>        8021:30905/TCP   14s
 
 
 

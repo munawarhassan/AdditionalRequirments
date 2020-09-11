@@ -7,19 +7,14 @@ docker run -p 8761:8761 -d --name currencyeurekaserver --network ms-chassis-nw m
 
 
 docker build -t munawarhassan/currencycloudapigateway:latest .
-docker run -p 80:8090 -d --name currencycloudapigateway --network ms-chassis-nw munawarhassan/currencycloudapigateway:latest
-
+docker run -p 80:8090 -d --name currencycloudapigateway --network ms-chassis-nw --env currencyservice.configserverurl=http://currencyconfigserver:8888 --env currencyservice.eurekaurl=http://currencyeurekaserver:8761/eureka munawarhassan/currencycloudapigateway:latest
 
 docker build -t munawarhassan/currencyconverterservice:latest .
-docker run -p 8081:8081 -d --name currencyconverterservice --network ms-chassis-nw munawarhassan/currencyconverterservice:latest
-#docker run -d --name currencyconverterservice --network ms-chassis-nw munawarhassan/currencyconverterservice:latest
-
+docker run -d --name currencyconverterservice --network ms-chassis-nw --env currencyservice.configserverurl=http://currencyconfigserver:8888 --env currencyservice.eurekaurl=http://currencyeurekaserver:8761/eureka munawarhassan/currencyconverterservice:latest
 
 
 docker build -t munawarhassan/currencyexchangeservice:latest .
-docker run -p 8082:8082 -d --name currencyexchangeservice --network ms-chassis-nw munawarhassan/currencyexchangeservice:latest
-#docker run -d --name currencyexchangeservice --network ms-chassis-nw munawarhassan/currencyexchangeservice:latest
-
+docker run -p 8082:8082 -d --name currencyexchangeservice --network ms-chassis-nw --env currencyservice.configserverurl=http://currencyconfigserver:8888 --env currencyservice.eurekaurl=http://currencyeurekaserver:8761/eureka munawarhassan/currencyexchangeservice:latest
 
 
 
@@ -43,6 +38,11 @@ kubectl apply -f currencyeurekaserver-svc-k8s.yaml
 kubectl apply -f currencycloudapigateway-dep-k8s.yaml
 kubectl apply -f currencycloudapigateway-svc-k8s.yaml
 
+kubectl apply -f currencyconverterservice-dep-k8s.yaml
+
+kubectl apply -f currencyexchangeservice-dep-k8s.yaml
+
+kubectl scale deployment currencyconverterservice --replicas=4
 
 ##################################
 
@@ -57,16 +57,26 @@ http://192.168.99.100/currencyexchange/default
 http://192.168.99.100/currencyexchange/convertcurrency/100/GBP/INR            ------------(Fign)
 http://192.168.99.100/currencyexchange/convertcurrency1/100/GBP/INR           ------------------(Ribbon)
 
-
-http://192.168.99.100/currencyconversionfactor/getconversionfactor/GBP
 http://192.168.99.100/currencyconversionfactor/addconversionfactor
 http://192.168.99.100/currencyconversionfactor/updateconversionfactor
+http://192.168.99.100/currencyconversionfactor/getconversionfactor/INR
+
+
+
+http://192.168.99.105:32760/currencycloudapigateway/default
+http://192.168.99.105:32760/currencyconversionfactor/default
+http://192.168.99.105:31969/currencyexchange/default
+http://192.168.99.105:32760/currencyconversionfactor/addconversionfactor
+http://192.168.99.105:32760/currencyconversionfactor/updateconversionfactor
+http://192.168.99.105:32760/currencyconversionfactor/getconversionfactor/INR
+http://192.168.99.105:32760/currencyexchange/convertcurrency/500/AUD/INR            ------------(Fign)
+http://192.168.99.105:32760/currencyexchange/convertcurrency1/100/GBP/INR    
 
 {
  "id": 10001,
  "currency" : "INR",
  "countryCode":"IND",
- "conversionFactor" : "0.019"
+ "conversionFactor" : "0.013"
 }
 
 
@@ -74,7 +84,21 @@ http://192.168.99.100/currencyconversionfactor/updateconversionfactor
  "id": 10002,
  "currency" : "GBP",
  "countryCode":"GB",
- "conversionFactor" : "1.29"
+ "conversionFactor" : "1.31"
+}
+
+{
+ "id": 10003,
+ "currency" : "EURO",
+ "countryCode":"EU",
+ "conversionFactor" : "1.
+}
+
+{
+ "id": 10004,
+ "currency" : "AUD",
+ "countryCode":"AUS",
+ "conversionFactor" : "0.72"
 }
 http://192.168.99.100:8761 (eureka)
 http://192.168.99.100:9411/zipkin/
@@ -82,6 +106,10 @@ http://192.168.99.100:8082/hystrix
 http://192.168.99.100:8082/actuator/hystrix.stream
 http://192.168.99.100:15672/#/channels
 
+
+http://192.168.99.105:32433/zipkin/
+http://192.168.99.105:32765/#/channels
+http://192.168.99.105:32307 (eureka)
 
 ######################################
 K8S

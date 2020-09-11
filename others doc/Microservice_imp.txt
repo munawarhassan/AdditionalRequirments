@@ -12,6 +12,7 @@ application name :CurrencyConversionFactorService
 55044
 55076
 
+http://localhost:8090/currencyconversionfactor/addconversionfactor
 http://192.168.99.100:8081/currencyconversionfactor/addconversionfactor
 http://localhost:8081/currencyconversionfactor/updateconversionfactor
 http://192.168.99.100:8081/currencyconversionfactor/default
