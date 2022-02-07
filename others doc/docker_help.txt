@@ -119,6 +119,11 @@ Java
 https://docs.docker.com/
 https://hub.docker.com/?ref=login
 
+docker-machine ls (to run command  from anywhere docker toolbox should be in path)
+docker-machine start docker-vm1
+docker-machine env docker-vm1 (will  get env variables) -> will get token with for loop
+ @FOR /f "tokens=*" %i IN ('docker-machine env docker-vm1') DO @%i (once you run it current session will be updated with docker settings )
+---------------------------
 docker-machine create -d "virtualbox" docker-vm3
 docker images
 docker pull nginx:latest
