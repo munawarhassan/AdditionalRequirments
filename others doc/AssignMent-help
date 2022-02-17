@@ -91,7 +91,7 @@ http://192.168.99.105:32760/currencyexchange/convertcurrency1/100/GBP/INR
  "id": 10003,
  "currency" : "EURO",
  "countryCode":"EU",
- "conversionFactor" : "1.
+ "conversionFactor" : "1.25"
 }
 
 {

@@ -96,7 +96,9 @@ http://192.168.99.100:8082/hystrix
 http://192.168.99.100:8082/actuator/hystrix.stream
 #################################
 
-
+jdbc:h2:mem:myDb
+http://localhost:8888/actuator/bus-refresh  (this is config server bus refresh. 
+                                             thus will update each instance of a microservice)
 http://localhost:63344/h2
 http://localhost:55123/actuator
 http://localhost:8082/hystrix
