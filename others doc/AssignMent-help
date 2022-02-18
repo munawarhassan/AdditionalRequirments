@@ -70,7 +70,7 @@ http://192.168.99.105:32760/currencyconversionfactor/addconversionfactor
 http://192.168.99.105:32760/currencyconversionfactor/updateconversionfactor
 http://192.168.99.105:32760/currencyconversionfactor/getconversionfactor/INR
 http://192.168.99.105:32760/currencyexchange/convertcurrency/500/AUD/INR            ------------(Fign)
-http://192.168.99.105:32760/currencyexchange/convertcurrency1/100/GBP/INR    
+http://192.168.99.105:32760/currencyexchange/convertcurrency1/100/GBP/INR    ---------------(Ribbon)
 
 {
  "id": 10001,
